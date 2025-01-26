@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: custom-git-clone
+spec:
+  params:
+    - name: url
+      description: The Git repository URL to clone
+      type: string
+    - name: revision
+      description: The branch, tag, or commit to checkout
+      type: string
+      default: main
+  workspaces:
+    - name: output
+      description: The workspace to clone the repository into
+  steps:
+    - name: clone
+      image: alpine/git:latest
+      script: |
+        #!/bin/sh
+        set -e
+        echo "Cloning repository $(params.url) at revision $(params.revision)..."
+        git clone --branch $(params.revision) $(params.url) $(workspaces.output.path)

@@ -1,0 +1,42 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: simple-pipeline
+spec:
+  params:
+    - name: repo-url
+      type: string
+    - name: branch
+      type: string
+      default: main
+  workspaces:
+    - name: shared-workspace
+  tasks:
+    - name: clone-repo
+      taskRef:
+        name: custom-git-clone
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+      params:
+        - name: url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.branch)"
+    - name: list-files
+      runAfter:
+        - clone-repo
+      workspaces:
+        - name: shared-workspace
+          workspace: shared-workspace
+      taskSpec:
+        workspaces:
+          - name: shared-workspace
+        steps:
+          - name: list-files
+            image: registry.access.redhat.com/ubi8/ubi:latest
+            workingDir: $(workspaces.shared-workspace.path)
+            script: |
+              #!/bin/bash
+              echo "Listing files in the cloned repository:"
+              ls -al
