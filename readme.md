@@ -3,4 +3,4 @@ Repository Init Content
 
 With PAC
 new test
-read thrhcc
+read thrhcc j
