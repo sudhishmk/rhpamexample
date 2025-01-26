@@ -3,15 +3,15 @@ kind: Repository
 metadata:
   name: custom-gitclone-repo
 spec:
-  url: https://github.com/your-org/your-repo
+  url: https://github.com/sudhishmk/rhpamexample.git
   pipelineRunSpec:
     pipelineRef:
       name: simple-pipeline
     params:
       - name: repo-url
-        value: https://github.com/your-org/your-repo
+        value: https://github.com/sudhishmk/rhpamexample.git
       - name: branch
-        value: main
+        value: master
     workspaces:
       - name: shared-workspace
         persistentVolumeClaim:
